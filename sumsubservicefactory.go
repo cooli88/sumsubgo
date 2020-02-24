@@ -3,7 +3,6 @@ package sumsubcl
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/cooli88/sumsubgo/summodel"
 	"io"
 	"net/http"
 )
@@ -29,7 +28,7 @@ const (
  *
  * @return DocSetDto
  */
-func (self *SumsubServiceFactory) CreateUpdateApplicantRequest(applicantProperties summodel.ApplicantPropertiesI) UpdateApplicantRequest {
+func (self *SumsubServiceFactory) CreateUpdateApplicantRequest(applicantProperties ApplicantPropertiesI) UpdateApplicantRequest {
 	return UpdateApplicantRequest{FirstName: applicantProperties.GetFirstName(), LastName: applicantProperties.GetLastName(), Dob: applicantProperties.GetDateOfBirth()}
 }
 
@@ -69,7 +68,7 @@ func (self *SumsubServiceFactory) createMetadata(uploadedFileClient *UploadedFil
  * @param tierLevel
  * @return
  */
-func (self *SumsubServiceFactory) CreateApplicantRequestBody(countryCodeISO3 string, applicantProperties summodel.ApplicantPropertiesI, kycProcessId string, tierLevel TierLevel) CreateApplicantRequest {
+func (self *SumsubServiceFactory) CreateApplicantRequestBody(countryCodeISO3 string, applicantProperties ApplicantPropertiesI, kycProcessId string, tierLevel TierLevel) CreateApplicantRequest {
 	createApplicantRequest := CreateApplicantRequest{}
 	createApplicantRequest.ExternalUserId = kycProcessId
 	createApplicantRequest.Metadata = self.createMetadataDtoArray(applicantProperties)
@@ -84,7 +83,7 @@ func (self *SumsubServiceFactory) CreateApplicantRequestBody(countryCodeISO3 str
  * @param applicantProperties
  * @return
  */
-func (self *SumsubServiceFactory) createMetadataDtoArray(applicantProperties summodel.ApplicantPropertiesI) []Metadata {
+func (self *SumsubServiceFactory) createMetadataDtoArray(applicantProperties ApplicantPropertiesI) []Metadata {
 	metadataDto := Metadata{KeyMetadataSelfiePhrase, applicantProperties.GetSelfiePhrase()}
 	return []Metadata{metadataDto}
 }
@@ -96,7 +95,7 @@ func (self *SumsubServiceFactory) createMetadataDtoArray(applicantProperties sum
  * @param country
  * @return
  */
-func (self *SumsubServiceFactory) createApplicantInfo(applicantProperties summodel.ApplicantPropertiesI, country string) ApplicantInfo {
+func (self *SumsubServiceFactory) createApplicantInfo(applicantProperties ApplicantPropertiesI, country string) ApplicantInfo {
 	applicantInfo := ApplicantInfo{
 		Country:   country,
 		FirstName: applicantProperties.GetFirstName(),
@@ -265,8 +264,8 @@ func (self *SumsubServiceFactory) getDocTypeSetForProofOfResidenc() []SumsubDocT
 //CheckApplicantDto checkApplicantDto = new CheckApplicantDto();
 //
 //if (response.getPersonWatchlist() != null) {
-//checkApplicantDto.setAnswer(response.getPersonWatchlist().getAnswer());
-//checkApplicantDto.setHits(response.getPersonWatchlist().getWatchlistInfo().getHits());
+//checkApplicantsetAnswer(response.getPersonWatchlist().getAnswer());
+//checkApplicantsetHits(response.getPersonWatchlist().getWatchlistInfo().getHits());
 //}
 //
 //return checkApplicantDto;
@@ -278,7 +277,7 @@ func (self *SumsubServiceFactory) getDocTypeSetForProofOfResidenc() []SumsubDocT
 * @param applicantProperties
 * @return
  */
-func (self *SumsubServiceFactory) CreateProofOfFundsDto(sourceOfIncome summodel.SourceOfIncomeI) ProofOfIncome {
+func (self *SumsubServiceFactory) CreateProofOfFundsDto(sourceOfIncome SourceOfIncomeI) ProofOfIncome {
 	return ProofOfIncome{
 		InvestabilityDto{
 			sourceOfIncome.GetInvestabilityType(),

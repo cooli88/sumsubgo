@@ -9,7 +9,6 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
-	"sumsubcl/dto"
 	"time"
 )
 
@@ -57,7 +56,7 @@ func (self *BaseClient) GetReturnResponse(uri string) *http.Response {
 	return self.doCommonRequestRaw(http.MethodGet, uri, []byte{})
 }
 
-func (self *BaseClient) Upload(uri string, values *map[string]io.Reader, uploadedFileClient *dto.UploadedFileClient) *http.Response {
+func (self *BaseClient) Upload(uri string, values *map[string]io.Reader, uploadedFileClient *UploadedFileClient) *http.Response {
 	var b bytes.Buffer
 	w := self.multipatrTobytes(values, &b)
 

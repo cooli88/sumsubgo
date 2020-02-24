@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"sumsubcl/dto"
 	"time"
 )
 
@@ -25,11 +24,11 @@ func CreateSourceOfIncomeClient(host string) *SourceOfIncomeClient {
 }
 
 //testtestuEUoXeYbEJehqGWrVJLgEJwfVFKiDhLu
-func (self *SourceOfIncomeClient) CreateSourceOfFunds(applicantId string, kycProcessId string, token string, proofOfIncome dto.ProofOfIncome) *dto.SumsubApplicantInfo {
+func (self *SourceOfIncomeClient) CreateSourceOfFunds(applicantId string, kycProcessId string, token string, proofOfIncome ProofOfIncome) *SumsubApplicantInfo {
 	uri := fmt.Sprintf(UriCreateSourceOfFunds, applicantId)
 	data := self.PatchSourceOfFunds(uri, token, kycProcessId, proofOfIncome)
 	fmt.Println(string(*data))
-	applicantInfo := dto.SumsubApplicantInfo{}
+	applicantInfo := SumsubApplicantInfo{}
 	_ = json.Unmarshal(*data, &applicantInfo)
 
 	return &applicantInfo

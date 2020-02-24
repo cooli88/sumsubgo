@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"sumsubcl/dto"
 	"time"
 )
 
@@ -33,7 +32,7 @@ func (self *AuthClient) PostCreateTokenAuth() *string {
 	response := self.doRequest(request)
 
 	data, _ := ioutil.ReadAll(response.Body)
-	tokenDto := dto.TokenDto{}
+	tokenDto := TokenDto{}
 	_ = json.Unmarshal(data, &tokenDto)
 	if !tokenDto.IsOk() {
 		panic("todo")

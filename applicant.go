@@ -1,7 +1,5 @@
 package sumsubcl
 
-import "sumsubcl/dto"
-
 type ApplicantPropertiesI interface {
 	GetSelfiePhrase() string
 	GetFirstName() string
@@ -11,10 +9,10 @@ type ApplicantPropertiesI interface {
 }
 
 type SourceOfIncomeI interface {
-	GetInvestabilityType() dto.InvestabilityTypeEnum
+	GetInvestabilityType() InvestabilityTypeEnum
 	GetTransactionAmount() int64
-	GetSourceOfIncome() dto.SumsubSourceOfIncome
-	GetInvestmentKnowledge() dto.InvestmentKnowledge
+	GetSourceOfIncome() SumsubSourceOfIncome
+	GetInvestmentKnowledge() InvestmentKnowledge
 	GetAnnualIncome() RangeOfMoneyI
 	GetNetWorth() RangeOfMoneyI
 }
