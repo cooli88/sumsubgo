@@ -1,5 +1,5 @@
 
-```
+```go
 package main
 
 import (
