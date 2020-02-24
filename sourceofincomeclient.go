@@ -1,12 +1,12 @@
-package sumsub
+package sumsubcl
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"sumsubcl/dto"
 	"net/http"
+	"sumsubcl/dto"
 	"time"
 )
 

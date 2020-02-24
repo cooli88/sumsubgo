@@ -1,4 +1,4 @@
-package dto
+package sumsubcl
 
 type (
 	DocumentStatusDto struct {

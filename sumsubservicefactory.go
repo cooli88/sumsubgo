@@ -1,12 +1,11 @@
-package sumsub
+package sumsubcl
 
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/cooli88/sumsubgo/summodel"
 	"io"
 	"net/http"
-	"sumsubcl/dto"
-	"sumsubcl/summodel"
 )
 
 func CreateSumsubServiceFactory() *SumsubServiceFactory {
@@ -30,11 +29,11 @@ const (
  *
  * @return DocSetDto
  */
-func (self *SumsubServiceFactory) CreateUpdateApplicantRequest(applicantProperties summodel.ApplicantPropertiesI) dto.UpdateApplicantRequest {
-	return dto.UpdateApplicantRequest{FirstName: applicantProperties.GetFirstName(), LastName: applicantProperties.GetLastName(), Dob: applicantProperties.GetDateOfBirth(),}
+func (self *SumsubServiceFactory) CreateUpdateApplicantRequest(applicantProperties summodel.ApplicantPropertiesI) UpdateApplicantRequest {
+	return UpdateApplicantRequest{FirstName: applicantProperties.GetFirstName(), LastName: applicantProperties.GetLastName(), Dob: applicantProperties.GetDateOfBirth()}
 }
 
-func (self *SumsubServiceFactory) CreateBodyUploadFile(uploadedFileClient *dto.UploadedFileClient, country string) *map[string]io.Reader {
+func (self *SumsubServiceFactory) CreateBodyUploadFile(uploadedFileClient *UploadedFileClient, country string) *map[string]io.Reader {
 	metadata := self.createMetadata(uploadedFileClient, country)
 	metadataJson, err := json.Marshal(metadata)
 
@@ -50,7 +49,7 @@ func (self *SumsubServiceFactory) CreateBodyUploadFile(uploadedFileClient *dto.U
 	return &values
 }
 
-func (self *SumsubServiceFactory) createMetadata(uploadedFileClient *dto.UploadedFileClient, country string) map[string]string {
+func (self *SumsubServiceFactory) createMetadata(uploadedFileClient *UploadedFileClient, country string) map[string]string {
 	metadata := map[string]string{
 		"idDocType": *uploadedFileClient.DocType,
 		"country":   country,
@@ -70,8 +69,8 @@ func (self *SumsubServiceFactory) createMetadata(uploadedFileClient *dto.Uploade
  * @param tierLevel
  * @return
  */
-func (self *SumsubServiceFactory) CreateApplicantRequestBody(countryCodeISO3 string, applicantProperties summodel.ApplicantPropertiesI, kycProcessId string, tierLevel dto.TierLevel) dto.CreateApplicantRequest {
-	createApplicantRequest := dto.CreateApplicantRequest{}
+func (self *SumsubServiceFactory) CreateApplicantRequestBody(countryCodeISO3 string, applicantProperties summodel.ApplicantPropertiesI, kycProcessId string, tierLevel TierLevel) CreateApplicantRequest {
+	createApplicantRequest := CreateApplicantRequest{}
 	createApplicantRequest.ExternalUserId = kycProcessId
 	createApplicantRequest.Metadata = self.createMetadataDtoArray(applicantProperties)
 	createApplicantRequest.Info = self.createApplicantInfo(applicantProperties, countryCodeISO3)
@@ -85,9 +84,9 @@ func (self *SumsubServiceFactory) CreateApplicantRequestBody(countryCodeISO3 str
  * @param applicantProperties
  * @return
  */
-func (self *SumsubServiceFactory) createMetadataDtoArray(applicantProperties summodel.ApplicantPropertiesI) []dto.Metadata {
-	metadataDto := dto.Metadata{KeyMetadataSelfiePhrase, applicantProperties.GetSelfiePhrase()}
-	return []dto.Metadata{metadataDto}
+func (self *SumsubServiceFactory) createMetadataDtoArray(applicantProperties summodel.ApplicantPropertiesI) []Metadata {
+	metadataDto := Metadata{KeyMetadataSelfiePhrase, applicantProperties.GetSelfiePhrase()}
+	return []Metadata{metadataDto}
 }
 
 /**
@@ -97,8 +96,8 @@ func (self *SumsubServiceFactory) createMetadataDtoArray(applicantProperties sum
  * @param country
  * @return
  */
-func (self *SumsubServiceFactory) createApplicantInfo(applicantProperties summodel.ApplicantPropertiesI, country string) dto.ApplicantInfo {
-	applicantInfo := dto.ApplicantInfo{
+func (self *SumsubServiceFactory) createApplicantInfo(applicantProperties summodel.ApplicantPropertiesI, country string) ApplicantInfo {
+	applicantInfo := ApplicantInfo{
 		Country:   country,
 		FirstName: applicantProperties.GetFirstName(),
 		LastName:  applicantProperties.GetLastName(),
@@ -115,25 +114,25 @@ func (self *SumsubServiceFactory) createApplicantInfo(applicantProperties summod
  * @param tier
  * @return
  */
-func (self *SumsubServiceFactory) GetRequireDocsByTier(tier dto.TierLevel) dto.RequireDocSet {
+func (self *SumsubServiceFactory) GetRequireDocsByTier(tier TierLevel) RequireDocSet {
 
-	requiredIdDocs := self.createDocSetByTier(tier);
+	requiredIdDocs := self.createDocSetByTier(tier)
 	requiredIdDocs = append(requiredIdDocs, self.createDocSetForFirstTier())
 
-	if tier > dto.TierLevel1 {
+	if tier > TierLevel1 {
 		requiredIdDocs = append(requiredIdDocs, self.createDocSetForIdentity())
 		requiredIdDocs = append(requiredIdDocs, self.createDocSetForSelfie())
 	}
 
-	if tier > dto.TierLevel2 {
+	if tier > TierLevel2 {
 		requiredIdDocs = append(requiredIdDocs, self.createDocSetForInvestability())
 	}
 
-	if tier > dto.TierLevel3 {
+	if tier > TierLevel3 {
 		requiredIdDocs = append(requiredIdDocs, self.createDocSetForProofOfResidence())
 	}
 
-	return dto.RequireDocSet{DocSets: requiredIdDocs}
+	return RequireDocSet{DocSets: requiredIdDocs}
 }
 
 /**
@@ -142,7 +141,7 @@ func (self *SumsubServiceFactory) GetRequireDocsByTier(tier dto.TierLevel) dto.R
  * @param tier
  * @return
  */
-func (self *SumsubServiceFactory) createDocSetByTier(tier dto.TierLevel) []dto.DocSet {
+func (self *SumsubServiceFactory) createDocSetByTier(tier TierLevel) []DocSet {
 	//todo сделать нормальное создане сейчас будет аллокейт какждый раз
 	//var countElements int8
 	//switch (tier) {
@@ -160,7 +159,7 @@ func (self *SumsubServiceFactory) createDocSetByTier(tier dto.TierLevel) []dto.D
 	//	break;
 	//}
 
-	a := []dto.DocSet{}
+	a := []DocSet{}
 
 	return a
 }
@@ -170,9 +169,9 @@ func (self *SumsubServiceFactory) createDocSetByTier(tier dto.TierLevel) []dto.D
  *
  * @return DocSetDto
  */
-func (self *SumsubServiceFactory) createDocSetForFirstTier() dto.DocSet {
-	docSetDtoForFirstTier := dto.DocSet{IdDocSetType: dto.ApplicantData,
-		Fields: []dto.DocSetField{
+func (self *SumsubServiceFactory) createDocSetForFirstTier() DocSet {
+	docSetDtoForFirstTier := DocSet{IdDocSetType: ApplicantData,
+		Fields: []DocSetField{
 			self.createDocSetField(FieldFirstName),
 			self.createDocSetField(FieldLastName),
 			self.createDocSetField(FieldDateOfBirth),
@@ -184,75 +183,75 @@ func (self *SumsubServiceFactory) createDocSetForFirstTier() dto.DocSet {
  * @param name
  * @return DocSetField
  */
-func (self *SumsubServiceFactory) createDocSetField(name string) dto.DocSetField {
-	field := dto.DocSetField{Name: name, Required: true}
+func (self *SumsubServiceFactory) createDocSetField(name string) DocSetField {
+	field := DocSetField{Name: name, Required: true}
 	return field
 }
 
 /**
 * DocSetField для второго тира Identity
-*/
-func (self *SumsubServiceFactory) createDocSetForIdentity() dto.DocSet {
-	return dto.DocSet{IdDocSetType: dto.Identity, Types: self.getDocTypeSetForIdentity(), SubTypes: self.getDocSubTypeSetForIdentity()}
+ */
+func (self *SumsubServiceFactory) createDocSetForIdentity() DocSet {
+	return DocSet{IdDocSetType: Identity, Types: self.getDocTypeSetForIdentity(), SubTypes: self.getDocSubTypeSetForIdentity()}
 }
 
 /**
 * Указываем какие документы принимаем для Identity
-*/
-func (self *SumsubServiceFactory) getDocTypeSetForIdentity() []dto.SumsubDocType {
-	return []dto.SumsubDocType{dto.Passport, dto.IdCard, dto.Drivers,}
+ */
+func (self *SumsubServiceFactory) getDocTypeSetForIdentity() []SumsubDocType {
+	return []SumsubDocType{Passport, IdCard, Drivers}
 }
 
 /**
 * Указываем какие подтипы документы принимаем для Identity
 * <p>
 * Примечание 2-сторонние доки только ID_CARD и DRIVER_LICENCE, они всегда 2 сторонние
-*/
-func (self *SumsubServiceFactory) getDocSubTypeSetForIdentity() []dto.SumsubDocSubType {
-	return []dto.SumsubDocSubType{dto.FrontSide, dto.BackSide}
+ */
+func (self *SumsubServiceFactory) getDocSubTypeSetForIdentity() []SumsubDocSubType {
+	return []SumsubDocSubType{FrontSide, BackSide}
 }
 
 //
 /**
 * DocSetField для второго тира Selfie
-*/
-func (self *SumsubServiceFactory) createDocSetForSelfie() dto.DocSet {
-	return dto.DocSet{IdDocSetType: dto.SelfieSetType, Types: self.getDocTypeSetForSelfie()}
+ */
+func (self *SumsubServiceFactory) createDocSetForSelfie() DocSet {
+	return DocSet{IdDocSetType: SelfieSetType, Types: self.getDocTypeSetForSelfie()}
 }
 
 /**
 * Указываем какие документы принимаем для Selfie
-*/
-func (self *SumsubServiceFactory) getDocTypeSetForSelfie() []dto.SumsubDocType {
-	return []dto.SumsubDocType{dto.Selfie}
+ */
+func (self *SumsubServiceFactory) getDocTypeSetForSelfie() []SumsubDocType {
+	return []SumsubDocType{Selfie}
 }
 
 /**
 * DocSetField для 3го тира Investability
-*/
-func (self *SumsubServiceFactory) createDocSetForInvestability() dto.DocSet {
-	return dto.DocSet{IdDocSetType: dto.Investability, Types: self.getDocTypeSetForInvestability()}
+ */
+func (self *SumsubServiceFactory) createDocSetForInvestability() DocSet {
+	return DocSet{IdDocSetType: Investability, Types: self.getDocTypeSetForInvestability()}
 }
 
 /**
 * Указываем какие документы принимаем для Investability
-*/
-func (self *SumsubServiceFactory) getDocTypeSetForInvestability() []dto.SumsubDocType {
-	return []dto.SumsubDocType{dto.IncomeSource}
+ */
+func (self *SumsubServiceFactory) getDocTypeSetForInvestability() []SumsubDocType {
+	return []SumsubDocType{IncomeSource}
 }
 
 /**
 * DocSetField для 4го тира PROOF_OF_RESIDENCE, может быть принят на 3ем тире, на 4ом обезательно
-*/
-func (self *SumsubServiceFactory) createDocSetForProofOfResidence() dto.DocSet {
-	return dto.DocSet{IdDocSetType: dto.ProofOfResidence, Types: self.getDocTypeSetForProofOfResidenc()}
+ */
+func (self *SumsubServiceFactory) createDocSetForProofOfResidence() DocSet {
+	return DocSet{IdDocSetType: ProofOfResidence, Types: self.getDocTypeSetForProofOfResidenc()}
 }
 
 /**
 * Указываем какие документы принимаем для PROOF_OF_RESIDENCE
-*/
-func (self *SumsubServiceFactory) getDocTypeSetForProofOfResidenc() []dto.SumsubDocType {
-	return []dto.SumsubDocType{dto.UtilityBill}
+ */
+func (self *SumsubServiceFactory) getDocTypeSetForProofOfResidenc() []SumsubDocType {
+	return []SumsubDocType{UtilityBill}
 }
 
 //
@@ -278,19 +277,19 @@ func (self *SumsubServiceFactory) getDocTypeSetForProofOfResidenc() []dto.Sumsub
 *
 * @param applicantProperties
 * @return
-*/
-func (self *SumsubServiceFactory) CreateProofOfFundsDto(sourceOfIncome summodel.SourceOfIncomeI) dto.ProofOfIncome {
-	return dto.ProofOfIncome{
-		dto.InvestabilityDto{
+ */
+func (self *SumsubServiceFactory) CreateProofOfFundsDto(sourceOfIncome summodel.SourceOfIncomeI) ProofOfIncome {
+	return ProofOfIncome{
+		InvestabilityDto{
 			sourceOfIncome.GetInvestabilityType(),
 			sourceOfIncome.GetTransactionAmount(),
 			sourceOfIncome.GetSourceOfIncome(),
 			sourceOfIncome.GetInvestmentKnowledge(),
-			dto.RangeOfMoney{
+			RangeOfMoney{
 				sourceOfIncome.GetAnnualIncome().GetFrom(),
 				sourceOfIncome.GetAnnualIncome().GetTo(),
 				sourceOfIncome.GetAnnualIncome().GetCurrency()},
-			dto.RangeOfMoney{
+			RangeOfMoney{
 				sourceOfIncome.GetNetWorth().GetFrom(),
 				sourceOfIncome.GetNetWorth().GetTo(),
 				sourceOfIncome.GetNetWorth().GetCurrency()},
@@ -304,9 +303,9 @@ func (self *SumsubServiceFactory) CreateProofOfFundsDto(sourceOfIncome summodel.
 *
 * @param responseEntity
 * @return
-*/
-func (self *SumsubServiceFactory) createUploadedFileFromResponse(response *http.Response) *dto.UploadedFile {
-	return &dto.UploadedFile{response.Header.Get(HeaderXImageId)}
+ */
+func (self *SumsubServiceFactory) createUploadedFileFromResponse(response *http.Response) *UploadedFile {
+	return &UploadedFile{response.Header.Get(HeaderXImageId)}
 }
 
 /**
@@ -314,9 +313,9 @@ func (self *SumsubServiceFactory) createUploadedFileFromResponse(response *http.
 *
 * @param response
 * @return
-*/
-func (self *SumsubServiceFactory) createDownloadFileFromResponse(response *http.Response) *dto.DownloadedFile {
-	return &dto.DownloadedFile{
+ */
+func (self *SumsubServiceFactory) createDownloadFileFromResponse(response *http.Response) *DownloadedFile {
+	return &DownloadedFile{
 		Body:          response.Body,
 		ContentType:   response.Header.Get(HeaderContentType),
 		ContentLength: response.ContentLength,

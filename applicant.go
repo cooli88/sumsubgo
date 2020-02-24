@@ -1,4 +1,4 @@
-package summodel
+package sumsubcl
 
 import "sumsubcl/dto"
 

@@ -1,21 +1,22 @@
-package sumsub
+package sumsubcl
 
 import (
+	"sumsubcl/client"
 	"sumsubcl/common"
 	"sumsubcl/dto"
 	"sumsubcl/summodel"
 )
 
 type SumsubService struct {
-	sumsubClient         *SumsubClient
-	sourceOfIncomeClient *SourceOfIncomeClient
-	sumsubServiceFactory *SumsubServiceFactory
+	sumsubClient         *client.SumsubClient
+	sourceOfIncomeClient *client.SourceOfIncomeClient
+	sumsubServiceFactory *client.SumsubServiceFactory
 }
 
 var sumsubService *SumsubService
 
 func GetSumsubService(sumsubConfig common.SumsubConfigI) *SumsubService {
-	if sumsubService == nil{
+	if sumsubService == nil {
 		sumsubService = CreateSumsubService(sumsubConfig)
 	}
 
@@ -23,10 +24,10 @@ func GetSumsubService(sumsubConfig common.SumsubConfigI) *SumsubService {
 }
 
 func CreateSumsubService(sumsubConfig common.SumsubConfigI) *SumsubService {
-	baseClient := CreateBaseClient(sumsubConfig.GetHost(), sumsubConfig.GetLogin(), sumsubConfig.GetPassword())
-	sumsubClient := NewSumsubClient(baseClient)
+	baseClient := client.CreateBaseClient(sumsubConfig.GetHost(), sumsubConfig.GetLogin(), sumsubConfig.GetPassword())
+	sumsubClient := client.NewSumsubClient(baseClient)
 
-	return &SumsubService{sumsubClient: sumsubClient, sourceOfIncomeClient:CreateSourceOfIncomeClient(sumsubConfig.GetHost())}
+	return &SumsubService{sumsubClient: sumsubClient, sourceOfIncomeClient: client.CreateSourceOfIncomeClient(sumsubConfig.GetHost())}
 }
 
 func (self *SumsubService) CreateApplicant(countryCodeISO3 string, applicantProperties summodel.ApplicantPropertiesI, kycProcessId string) *dto.ApplicantResponse {

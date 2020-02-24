@@ -1,4 +1,4 @@
-package dto
+package sumsubcl
 
 type SumsubDocSubType string
 type SumsubDocType string
@@ -73,7 +73,7 @@ const (
 	Red   ReviewAnswerState = "RED"
 	Green ReviewAnswerState = "GREEN"
 
-	Final ReviewRejectType = "FINAL"
-	Retry ReviewRejectType = "RETRY"
+	Final    ReviewRejectType = "FINAL"
+	Retry    ReviewRejectType = "RETRY"
 	External ReviewRejectType = "EXTERNAL"
 )

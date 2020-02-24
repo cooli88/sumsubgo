@@ -1,4 +1,4 @@
-package sumsub
+package sumsubcl
 
 import (
 	"bytes"
