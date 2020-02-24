@@ -58,21 +58,21 @@ type (
 	}
 
 	SumsubApplicantInfo struct {
-		FirstName      string           `json:"firstName"`
-		MiddleName     string           `json:"middleName"`
-		FirstNameEn    string           `json:"firstNameEn"`
-		LastNameEn     string           `json:"lastNameEn"`
-		LastName       string           `json:"lastName"`
-		Dob            string           `json:"dob"`
-		PlaceOfBirth   string           `json:"placeOfBirth"`
-		Country        string           `json:"country"`
-		CountryOfBirth string           `json:"countryOfBirth"`
-		Phone          string           `json:"phone"`
-		Gender         string           `json:"gender"`
-		StateOfBirth   string           `json:"stateOfBirth"`
-		Addresses      []Address        `json:"addresses"`
-		IdDocs         []IdDocResponse  `json:"idDocs"`
-		Investability  InvestabilityDto `json:"investability"`
+		FirstName      string            `json:"firstName"`
+		MiddleName     string            `json:"middleName"`
+		FirstNameEn    string            `json:"firstNameEn"`
+		LastNameEn     string            `json:"lastNameEn"`
+		LastName       string            `json:"lastName"`
+		Dob            string            `json:"dob"`
+		PlaceOfBirth   string            `json:"placeOfBirth"`
+		Country        string            `json:"country"`
+		CountryOfBirth string            `json:"countryOfBirth"`
+		Phone          string            `json:"phone"`
+		Gender         string            `json:"gender"`
+		StateOfBirth   string            `json:"stateOfBirth"`
+		Addresses      []Address         `json:"addresses"`
+		IdDocs         []IdDocResponse   `json:"idDocs"`
+		Investability  *InvestabilityDto `json:"investability"`
 	}
 
 	Address struct {
