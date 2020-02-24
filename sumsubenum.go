@@ -1,4 +1,4 @@
-package sumsubcl
+package sumsubgo
 
 type SumsubDocSubType string
 type SumsubDocType string

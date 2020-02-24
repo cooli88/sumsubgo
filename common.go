@@ -1,4 +1,4 @@
-package sumsubcl
+package sumsubgo
 
 import (
 	"io"

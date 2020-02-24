@@ -1,4 +1,4 @@
-package sumsubcl
+package sumsubgo
 
 type SumsubConfigI interface {
 	GetHost() string

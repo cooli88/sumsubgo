@@ -1,4 +1,4 @@
-package sumsubcl
+package sumsubgo
 
 type SumsubService struct {
 	sumsubClient         *SumsubClient
